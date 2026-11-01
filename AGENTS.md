@@ -6,13 +6,14 @@ Welcome to **Boxie** (Parametric Portable Generator Enclosure Design). This guid
 
 ## 1. Project Overview & Scope
 
-The purpose of this project is to maintain, formulate, and generate engineering designs for portable generator enclosures ("Boxie") ready for drafting and fabrication in **AutoCAD** (via DXF, AutoLISP, or Script files) and modern CNC/sheet-metal/plywood workflows.
+The purpose of this project is to maintain, formulate, and generate engineering designs for portable generator enclosures ("Boxie") ready for drafting and fabrication in **AutoCAD** (via DXF, AutoLISP, or Script files) and modern CNC/sheet-metal/plywood workflows, driven by structured input job data.
 
 Key objectives:
 - **Acoustic Attenuation**: Enclosure sound suppression (target -15 dBA to -25 dBA reduction) using maze-baffle geometry and sound-dampening acoustic foam.
 - **Thermal Management & Airflow**: Active/passive forced air ventilation separating intake cool air from high-temp combustion exhaust.
 - **Portability & Serviceability**: Modular flat-pack or quick-latch assembly, fold-out handles, all-terrain casters, and quick-access maintenance panels.
-- **Parametric CAD Generation**: Formulated mathematical models that translate generator dimensions $(L_g, W_g, H_g, P_{\text{watt}})$ into AutoCAD entities (layers, polylines, 3D solids, cutouts).
+- **Parametric CAD Generation**: Formulated mathematical models that translate input dimensions $(L_g, W_g, H_g, P_{\text{watt}})$ into AutoCAD entities (layers, polylines, 3D solids, cutouts).
+- **Manufacturing Data Interfacing**: Structured ingestion of work orders, material specifications, and cut-list export to interface enterprise shop and manufacturing systems.
 
 ---
 
@@ -20,9 +21,9 @@ Key objectives:
 
 ```
 .
-├── AGENTS.md            # Maintenance guide and rules for AI agents & contributors
+├── AGENTS.md            # Maintenance guide and rules for AI agents & contributors (aliased as agents.md)
 ├── REQUIREMENTS.md      # Engineering requirements, CAD parametric formulation & Traceability Matrix (RTM)
-├── README.md            # Project presentation, overview diagrams, and generator box visual specifications
+├── README.md            # Project presentation, overview diagrams, and generator box visual specifications (aliased as read.MD)
 ├── LICENSE              # Repository license
 └── scripts/             # (Optional) Parametric generators, AutoLISP routines, DXF generation tools
 ```
@@ -59,11 +60,12 @@ Follow AIA / ISO 13567 compliant layer standards:
 ## 4. Maintenance & Contribution Guidelines
 
 ### 4.1 Requirement Traceability
-- Every design decision, cutout, baffle dimension, or CAD layer MUST trace back to a Requirement ID in `REQUIREMENTS.md` (e.g., `REQ-PHY-01`, `REQ-ACO-02`, `REQ-CAD-01`).
+- Every design decision, cutout, baffle dimension, or CAD layer MUST trace back to a Requirement ID in `REQUIREMENTS.md` (e.g., `REQ-PHY-01`, `REQ-ACO-02`, `REQ-INT-01`, `REQ-CAD-01`).
 - When modifying enclosure geometry or AutoCAD formulation scripts, update the **Requirements Traceability Matrix (RTM)** in `REQUIREMENTS.md` and verify diagram consistency in `README.md`.
 
 ### 4.2 Formatting & Conventions
 - Maintain clear Markdown formatting across all `.md` files.
+- Keep `agents.md` and `read.MD` synchronized or linked with `AGENTS.md` and `README.md`.
 - Diagrams should be represented with clear ASCII/Unicode orthographic projections (Top, Front, Side views) and isometric projections so they are readable in terminal and web markdown viewers.
 - Math equations should be expressed in clean LaTeX format (e.g., $V_{\text{box}} = L \times W \times H$).
 
@@ -72,4 +74,4 @@ Before submitting any changes:
 1. Verify that all requirement IDs in `REQUIREMENTS.md` match entries in the Traceability Matrix.
 2. Confirm dimensional consistency across `REQUIREMENTS.md`, `README.md`, and any CAD scripts.
 3. Check layer naming against the AutoCAD Layer Standard (Section 3.1).
-4. Run syntax and integrity checks on any code or CAD automation files.
+4. Run syntax and integrity checks on all documentation and CAD automation files.

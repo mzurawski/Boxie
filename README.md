@@ -2,16 +2,29 @@
 
 Boxie is a parametric, sound-attenuating, thermally managed portable generator enclosure designed for drafting and fabrication in **AutoCAD** and automated CNC manufacturing workflows.
 
-For maintenance workflows and agent instructions, see [`AGENTS.md`](./AGENTS.md).
+For maintenance workflows and agent instructions, see [`AGENTS.md`](./AGENTS.md) (or [`agents.md`](./agents.md)).
 For the complete engineering specifications, AutoCAD formulation equations, and Requirements Traceability Matrix, see [`REQUIREMENTS.md`](./REQUIREMENTS.md).
 
 ---
 
-## 1. Visual Design Views (Generated from Requirements)
+## 1. System Pipeline Overview
+
+```
++------------------------------------+        +---------------------------+        +---------------------------+
+| Global Shop Solutions (GSS) ERP    |        | Parametric Formulator     |        | AutoCAD / Fabrication     |
+| - Work Order / Part Master Import  | =====> | - Calculates Clearances   | =====> | - AIA Layer Generation    |
+| - Dimensions, Materials & Options  |        | - Sizes Acoustic Baffles  |        | - Closed CNC Polylines    |
+| (REQ-INT-01 / INT-02)              |        | - Heat Shield Stand-off   |        | - Reconciled Cut-List BOM |
++------------------------------------+        +---------------------------+        +---------------------------+
+```
+
+---
+
+## 2. Visual Design Views (Generated from Requirements)
 
 The diagrams below represent the enclosure layout, airflow pathways, dimensions, and sub-assemblies derived from the specifications in `REQUIREMENTS.md`.
 
-### 1.1 Isometric View & Sub-Assembly Layout
+### 2.1 Isometric View & Sub-Assembly Layout
 
 ```
                   +==============================================+
@@ -47,7 +60,7 @@ The diagrams below represent the enclosure layout, airflow pathways, dimensions,
 
 ---
 
-### 1.2 Longitudinal Section & Airflow View (Side Elevation)
+### 2.2 Longitudinal Section & Airflow View (Side Elevation)
 
 Demonstrating compliance with **REQ-THM-01**, **REQ-THM-02**, **REQ-ACO-02**, and **REQ-ACO-03**:
 
@@ -75,7 +88,7 @@ Demonstrating compliance with **REQ-THM-01**, **REQ-THM-02**, **REQ-ACO-02**, an
 
 ---
 
-### 1.3 Plan View / Internal Component Layout (Top-Down Cross Section)
+### 2.3 Plan View / Internal Component Layout (Top-Down Cross Section)
 
 Demonstrating compliance with **REQ-PHY-01** (clearances), **REQ-SAF-01**, and **REQ-CAD-02** (layer mapping):
 
@@ -108,7 +121,7 @@ Demonstrating compliance with **REQ-PHY-01** (clearances), **REQ-SAF-01**, and *
 
 ---
 
-## 2. Dimensional & Design Summary Table
+## 3. Dimensional & Design Summary Table
 
 | Attribute | Specification | Traceability ID | Description |
 | :--- | :--- | :--- | :--- |
@@ -121,10 +134,11 @@ Demonstrating compliance with **REQ-PHY-01** (clearances), **REQ-SAF-01**, and *
 | **Cooling Airflow**   | $200\text{ CFM}$ active forced ventilation | `REQ-THM-01`, `02` | Dual 120mm high-static-pressure fans ($<15^\circ\text{C}$ rise) |
 | **Mobility Hardware** | Dual $\varnothing 150\text{ mm}$ wheels + fold-down handle | `REQ-PHY-05` | Single-operator rolling on rough terrain |
 | **Safety Features**   | IP55 brush port, CO alarm, M8 ground lug | `REQ-SAF-01..04` | Weatherproofing, electrical safety & gas safety |
+| **Data Interfacing**  | Structured work orders, extraction & cut-list BOM | `REQ-INT-01..03` | Automated job ingestion & reconciled inventory BOM |
 
 ---
 
-## 3. AutoCAD Layer Organization
+## 4. AutoCAD Layer Organization
 
 The box model elements map directly to AutoCAD drawing layers:
 
@@ -141,11 +155,11 @@ The box model elements map directly to AutoCAD drawing layers:
 
 ---
 
-## 4. Fabrication & Usage Instructions
+## 5. Fabrication & Usage Instructions
 
 1. **AutoCAD Generation**:
-   - Run the parametric LISP script (`GEN_BOXIE`) or execute `.scr` with your generator dimensions $(L_g, W_g, H_g)$.
-   - Review dimensions against `REQUIREMENTS.md`.
+   - Ingest job record or run the parametric LISP script (`GEN_BOXIE`) with generator dimensions $(L_g, W_g, H_g)$.
+   - Verify geometry against `REQUIREMENTS.md`.
 2. **CNC Cutting**:
    - Export layers `M-ENCL-PVIS` and `M-VENT-INTK` to DXF.
    - Cut outer walls using an $18\text{ mm}$ sheet on CNC router with $0.2\text{ mm}$ kerf allowance.

@@ -1,6 +1,6 @@
 # REQUIREMENTS: Parametric Portable Generator Box ("Boxie")
 
-This document specifies the functional, physical, acoustic, thermal, safety, and CAD formulation requirements for the design and AutoCAD drafting of a portable generator enclosure box. It also includes the complete **Requirements Traceability Matrix (RTM)**.
+This document specifies the functional, physical, acoustic, thermal, safety, input data interfacing, and CAD formulation requirements for the design and AutoCAD drafting of a portable generator enclosure box. It also includes the complete **Requirements Traceability Matrix (RTM)**.
 
 ---
 
@@ -36,7 +36,13 @@ This document specifies the functional, physical, acoustic, thermal, safety, and
 * **REQ-SAF-03 (Grounding Lug)**: External copper grounding terminal stud (M8 / 5/16") bonded directly to the internal generator ground chassis.
 * **REQ-SAF-04 (Weatherproofing & Ingress)**: Louvered exterior air intakes angled at $45^\circ$ downward with fine mesh insect/water screens (IP44 equivalent) to prevent rain ingress during outdoor operation.
 
-### 1.5 AutoCAD Formulation & Scripting Requirements (CAD)
+### 1.5 System Interfacing & Input Data Requirements (INT)
+
+* **REQ-INT-01 (Global Shop Solutions ERP Interface)**: The program must interface with and import work order, part master, and Bill of Materials (BOM) records from **Global Shop Solutions (GSS) ERP** via standard integration interfaces (GSS ODBC database views, REST API endpoints, or structured XML/CSV work order exports) containing generator model, clearance requirements, inventory raw material stock codes, and customer configuration options.
+* **REQ-INT-02 (Parametric Data Extraction)**: The system must automatically extract dimensional inputs ($L_g, W_g, H_g$), acoustic attenuation target, and material panel gauge from the inbound Global Shop Solutions job record to drive CAD generation without manual drafting re-entry.
+* **REQ-INT-03 (BOM & Cut-List Reconciliation)**: Upon generating the AutoCAD box design, the program must output a reconciled fabrication cut-list (panel dimensions, cutouts, hardware part numbers) formatted to write back into Global Shop Solutions ERP inventory and routing modules.
+
+### 1.6 AutoCAD Formulation & Scripting Requirements (CAD)
 
 * **REQ-CAD-01 (Parametric Scripting Architecture)**: All enclosure geometry must be formulable via parametric AutoLISP / AutoCAD Script (`.scr`) commands taking generator dimensions $(L_g, W_g, H_g, T_{\text{wall}}, T_{\text{ins}})$ as input parameters.
 * **REQ-CAD-02 (Layer Hierarchy & Standards)**: AutoCAD drawings must generate geometry on standardized layers according to AIA/ISO 13567 (`M-ENCL-PVIS`, `M-ENCL-INSL`, `M-VENT-INTK`, `M-VENT-EXHT`, `M-HARD-ACCS`, `M-ELEC-PORT`, `G-ANNO-DIMS`, `G-ANNO-TEXT`).
@@ -47,7 +53,7 @@ This document specifies the functional, physical, acoustic, thermal, safety, and
 
 ## 2. Mathematical Formulation for AutoCAD Enclosure Generation
 
-To Kraft the box in an automated program or AutoCAD script, the outer dimensions, internal chamber partitions, and cutout profiles are formulated as functions of the generator dimensions:
+To Kraft the box in an automated program or AutoCAD script, the outer dimensions, internal chamber partitions, and cutout profiles are formulated as functions of the generator dimensions and input data:
 
 ### 2.1 Enclosure Sizing Formulation
 
@@ -80,20 +86,22 @@ For a standard generator ($L_g = 600\text{ mm}, W_g = 450\text{ mm}, H_g = 480\t
 - $W_{\text{ext}} = 450 + 150 + 2(18 + 25) = 686 \approx 690\text{ mm}$
 - $H_{\text{ext}} = 480 + 75 + 45 + 30 + 2(18 + 25) + 30 = 746 \approx 750\text{ mm}$
 
-### 2.2 AutoCAD Entity Generation Formulation
+### 2.2 Input Data Transformation & AutoCAD Script Formulation
 
-The program constructs the AutoCAD model through sequential parametric primitives:
+The program parses the inbound job parameters and generates AutoCAD drawing commands:
 
 ```lisp
-;; AutoLISP Formulation Snippet for Enclosure Shell Generation
-(defun c:GEN_BOXIE ( / Lg Wg Hg Cmin Lext Wext Hext Tw Tins )
+;; AutoLISP Parametric Box Formulation Routine
+(defun c:GEN_BOXIE ( / Lg Wg Hg Cmin Lext Wext Hext Tw Tins JobID )
+  ;; Default parameters or extracted from shop order data
+  (setq JobID "WO-2026-8841")
   (setq Lg 600.0  Wg 450.0  Hg 480.0)
   (setq Cmin 75.0 Tw 18.0   Tins 25.0)
   (setq Lext (+ Lg (* 2 Cmin) 260.0 (* 2 (+ Tw Tins))))
   (setq Wext (+ Wg (* 2 Cmin) (* 2 (+ Tw Tins))))
   (setq Hext (+ Hg Cmin 75.0 (* 2 (+ Tw Tins))))
 
-  ;; 1. Set Layer for Outer Panels
+  ;; 1. Set Layer for Outer Panels (AIA Standard M-ENCL-PVIS)
   (command "-LAYER" "M" "M-ENCL-PVIS" "C" "7" "" "")
   ;; Draw Base / Outer Box Polyline
   (command "_RECTANG" (list 0.0 0.0) (list Lext Wext))
@@ -105,13 +113,18 @@ The program constructs the AutoCAD model through sequential parametric primitive
 
   ;; 3. Intake Baffle & Fan Cutout
   (command "-LAYER" "M" "M-VENT-INTK" "C" "4" "" "")
-  (command "_CIRCLE" (list 100.0 (/ Wext 2.0)) 60.0) ; 120mm Intake Fan
+  (command "_CIRCLE" (list 100.0 (/ Wext 2.0)) 60.0) ; 120mm Intake Fan Cutout
 
-  ;; 4. Exhaust Port Cutout
+  ;; 4. Exhaust Port Cutout & Heat Shield Mount
   (command "-LAYER" "M" "M-VENT-EXHT" "C" "1" "" "")
   (command "_RECTANG" (list (- Lext 150.0) (- (/ Wext 2.0) 60.0))
                       (list (- Lext 30.0)  (+ (/ Wext 2.0) 60.0)))
-  (princ "\nBoxie AutoCAD Geometry generated successfully.")
+
+  ;; 5. Electrical Pass-through & Hardware
+  (command "-LAYER" "M" "M-ELEC-PORT" "C" "6" "" "")
+  (command "_CIRCLE" (list (+ Tw Tins 50.0) 0.0) 37.5) ; 75mm Brush Port
+
+  (princ (strcat "\nBoxie AutoCAD Geometry generated for Job: " JobID))
   (princ)
 )
 ```
@@ -142,6 +155,9 @@ The following matrix establishes forward and backward traceability between each 
 | **REQ-SAF-02** | CO Monitor Mount | Interior bracket for certified CO alarm | Bracket footprint on layer `M-HARD-ACCS` | Carbon Monoxide Sensor | Sensor Operational Trigger Test |
 | **REQ-SAF-03** | External Grounding Lug | M8 Copper chassis bonding terminal | M8 hole callout on `M-ELEC-PORT` / `G-ANNO-DIMS`| Chassis Grounding Stud | Resistance to Ground Test ($< 0.1\,\Omega$) |
 | **REQ-SAF-04** | Ingress Protection | $45^\circ$ downward louvers, IP44 weather mesh | Louver profiles & blade angles on `M-VENT-INTK` | Exterior Intake & Exhaust Hoods | Water Spray / Ingress Testing |
+| **REQ-INT-01** | Global Shop Solutions Interface | Structured work order / BOM data import from GSS ERP | Data parsing routine in generator script | GSS ERP Data Ingestion | ERP Schema & Data Ingestion Test |
+| **REQ-INT-02** | Parametric Data Extraction | Extract $(L_g, W_g, H_g)$, material, options from GSS | Parametric variable assignment `(setq Lg ...)` | Input Transform Pipeline | Parameter Extraction Unit Test |
+| **REQ-INT-03** | Cut-List & BOM Reconciliation | Export cut-list & hardware BOM back to GSS ERP | Polyline measurement & bill of materials dump | GSS Inventory & Shop Routing | BOM Cross-Check Against Inventory |
 | **REQ-CAD-01** | Parametric Scripting | Script / LISP driver taking $(L_g, W_g, H_g)$ | AutoLISP function `c:GEN_BOXIE` & `.scr` file | CAD Automation Pipeline | Script Execution in AutoCAD |
 | **REQ-CAD-02** | Layer Standardization | Standardized AIA/ISO 13567 CAD layers | Layer definition table implemented in script | Drawing File Structure | AutoCAD Layer Audit (`LAYWALK`) |
 | **REQ-CAD-03** | Closed CNC Polylines | Closed `LWPOLYLINE` geometry for cutouts | Script generation using `_RECTANG` / `_PLINE` | DXF CNC Export | CAM Software DXF Toolpath Import Test |
