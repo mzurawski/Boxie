@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Boxie 3D Viewer - WO-2026-8841 (Baltic Birch Plywood)</title>
+  <style>
+    body { margin: 0; padding: 0; background: #1e1e24; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; overflow: hidden; }
+    #header { position: absolute; top: 16px; left: 16px; z-index: 100; background: rgba(20, 20, 28, 0.85); backdrop-filter: blur(8px); padding: 16px 20px; border-radius: 8px; border: 1px solid #333; }
+    #header h1 { margin: 0 0 6px 0; font-size: 18px; color: #4ade80; }
+    #header p { margin: 3px 0; font-size: 13px; color: #cbd5e1; }
+    #controls { position: absolute; bottom: 16px; left: 16px; z-index: 100; background: rgba(20, 20, 28, 0.85); padding: 12px 18px; border-radius: 8px; font-size: 13px; color: #94a3b8; }
+    #canvas-container { width: 100vw; height: 100vh; display: block; }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+  <div id="header">
+    <h1>Boxie 3D Viewer — WO-2026-8841</h1>
+    <p><strong>Part:</strong> BOX-GEN-2000W-PLY | <strong>Material:</strong> Baltic Birch Plywood (18.0mm)</p>
+    <p><strong>Outer Envelope:</strong> 1006.0mm × 526.0mm × 691.0mm</p>
+    <p><strong>Generator:</strong> Honda EU2200i / Inverter Class (510.0 × 290.0 × 425.0 mm)</p>
+  </div>
+  <div id="controls">
+    Rotate: Left-Click + Drag &nbsp;|&nbsp; Pan: Right-Click + Drag &nbsp;|&nbsp; Zoom: Scroll Wheel
+  </div>
+  <div id="canvas-container"></div>
+
+  <script>
+    const container = document.getElementById('canvas-container');
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x18181b);
+    scene.fog = new THREE.FogExp2(0x18181b, 0.003);
+
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 2000);
+    camera.position.set(160, 120, 180);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.shadowMap.enabled = true;
+    container.appendChild(renderer.domElement);
+
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+
+    // Lighting
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    scene.add(ambientLight);
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    dirLight.position.set(150, 200, 100);
+    dirLight.castShadow = true;
+    scene.add(dirLight);
+
+    // Floor Grid
+    const grid = new THREE.GridHelper(400, 40, 0x3f3f46, 0x27272a);
+    grid.position.y = 0;
+    scene.add(grid);
+
+    // Main Box Group
+    const boxGroup = new THREE.Group();
+    scene.add(boxGroup);
+
+    // Outer Enclosure (Transparent Wood or Metal)
+    const boxGeo = new THREE.BoxGeometry(100.6, 69.1, 52.6);
+    const boxMat = new THREE.MeshStandardMaterial({
+      color: 0xc29b68, // Wood Baltic Birch hue
+      roughness: 0.6,
+      metalness: 0.1,
+      transparent: true,
+      opacity: 0.45,
+      wireframe: false
+    });
+    const outerBox = new THREE.Mesh(boxGeo, boxMat);
+    outerBox.position.y = 69.1 / 2 + 3.0; // elevated on wheels
+    boxGroup.add(outerBox);
+
+    // Outer Box Wireframe Outline
+    const wireGeo = new THREE.EdgesGeometry(boxGeo);
+    const wireMat = new THREE.LineBasicMaterial({ color: 0x4ade80, linewidth: 2 });
+    const wireframe = new THREE.LineSegments(wireGeo, wireMat);
+    wireframe.position.y = outerBox.position.y;
+    boxGroup.add(wireframe);
+
+    // Generator Unit (Core Block inside)
+    const genGeo = new THREE.BoxGeometry(51.0, 42.5, 29.0);
+    const genMat = new THREE.MeshStandardMaterial({
+      color: 0xd93829, // Honda Red
+      roughness: 0.3,
+      metalness: 0.4
+    });
+    const genMesh = new THREE.Mesh(genGeo, genMat);
+    genMesh.position.set(5.0, 42.5/2 + 5.0, 0);
+    boxGroup.add(genMesh);
+
+    // Acoustic Maze Baffles
+    const baffleMat = new THREE.MeshStandardMaterial({ color: 0x38bdf8, roughness: 0.4 });
+    const b1 = new THREE.Mesh(new THREE.BoxGeometry(1.8, 69.1 * 0.7, 52.6 * 0.75), baffleMat);
+    b1.position.set(-100.6/2 + 10.0, 69.1/2 + 3.0, -52.6 * 0.1);
+    boxGroup.add(b1);
+    const b2 = new THREE.Mesh(new THREE.BoxGeometry(1.8, 69.1 * 0.7, 52.6 * 0.75), baffleMat);
+    b2.position.set(-100.6/2 + 18.0, 69.1/2 + 3.0, 52.6 * 0.1);
+    boxGroup.add(b2);
+
+    // Exhaust Heat Shield & Flange
+    const shieldMat = new THREE.MeshStandardMaterial({ color: 0xf43f5e, metalness: 0.8, roughness: 0.2 });
+    const shield = new THREE.Mesh(new THREE.BoxGeometry(2.0, 18.0, 18.0), shieldMat);
+    shield.position.set(100.6/2 - 3.0, 69.1/2 + 6.0, 0);
+    boxGroup.add(shield);
+
+    // Wheels
+    const wheelGeo = new THREE.CylinderGeometry(7.5, 7.5, 4.0, 24);
+    const wheelMat = new THREE.MeshStandardMaterial({ color: 0x111827, roughness: 0.8 });
+    const wheel1 = new THREE.Mesh(wheelGeo, wheelMat);
+    wheel1.rotation.x = Math.PI / 2;
+    wheel1.position.set(100.6/2 - 10.0, 7.5, 52.6/2 + 2.0);
+    boxGroup.add(wheel1);
+    const wheel2 = wheel1.clone();
+    wheel2.position.z = -52.6/2 - 2.0;
+    boxGroup.add(wheel2);
+
+    // Fold Handle
+    const handleMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.7 });
+    const handle = new THREE.Mesh(new THREE.BoxGeometry(2.0, 4.0, 52.6 * 0.6), handleMat);
+    handle.position.set(-100.6/2 - 3.0, 69.1 * 0.75, 0);
+    boxGroup.add(handle);
+
+    // Animation Loop
+    function animate() {
+      requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
+</body>
+</html>

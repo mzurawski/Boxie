@@ -1,0 +1,30 @@
+{
+  "work_order": "WO-2026-9102",
+  "part_number": "BOX-GEN-4500W-ALUM",
+  "customer_name": "Titan Heavy Contractors",
+  "generator": {
+    "make_model": "Champion 4500W Open Frame Inverter",
+    "length_mm": 590.0,
+    "width_mm": 440.0,
+    "height_mm": 465.0,
+    "rated_watts": 4500,
+    "noise_base_dba": 68.0,
+    "exhaust_position": "rear_center"
+  },
+  "material_specification": {
+    "core_material": "5052-H32 Aluminum Sheet",
+    "stock_part_id": "ALUM-5052-2.5MM",
+    "panel_thickness_mm": 2.5,
+    "finish": "Powder-coated Matte Black",
+    "lining_material": "UL 94 HF-1 High-Density Closed-Cell Foam + Foil Barrier",
+    "lining_thickness_mm": 25.0
+  },
+  "options": {
+    "ventilation": "Active Dual 140mm High-Static Fans",
+    "target_cfm": 280,
+    "target_attenuation_dba": 22,
+    "mobility_kit": "Heavy-duty pneumatic 200mm wheels",
+    "electrical_pass_through": "Dual IP55 brush grommet 75mm",
+    "heat_shield": "15mm ceramic fiber with 316 SS exhaust diverter"
+  }
+}

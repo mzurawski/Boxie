@@ -1,0 +1,30 @@
+{
+  "work_order": "WO-2026-8841",
+  "part_number": "BOX-GEN-2000W-PLY",
+  "customer_name": "Apex Field Operations",
+  "generator": {
+    "make_model": "Honda EU2200i / Inverter Class",
+    "length_mm": 510.0,
+    "width_mm": 290.0,
+    "height_mm": 425.0,
+    "rated_watts": 2200,
+    "noise_base_dba": 57.0,
+    "exhaust_position": "rear_right"
+  },
+  "material_specification": {
+    "core_material": "Baltic Birch Plywood",
+    "stock_part_id": "PLY-BIRCH-18MM",
+    "panel_thickness_mm": 18.0,
+    "finish": "Marine Grade Polyurethane Spar Varnish",
+    "lining_material": "Class 1 Flame-Retardant Acoustic Foam + 2.5kg/m2 MLV",
+    "lining_thickness_mm": 25.0
+  },
+  "options": {
+    "ventilation": "Active Dual 120mm Fans",
+    "target_cfm": 200,
+    "target_attenuation_dba": 20,
+    "mobility_kit": "Dual 150mm all-terrain rear wheels and fold-out handle",
+    "electrical_pass_through": "IP55 brush grommet 75mm",
+    "heat_shield": "10mm ceramic fiber with 304 SS cowl"
+  }
+}

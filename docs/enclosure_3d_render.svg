@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620" width="100%" height="100%" style="background:#18181b; font-family:sans-serif;">
+  <defs>
+    <linearGradient id="woodGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d4a373" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#bc6c25" stop-opacity="0.85"/>
+    </linearGradient>
+    <linearGradient id="foamGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e9d8a6" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#ee9b00" stop-opacity="0.6"/>
+    </linearGradient>
+    <linearGradient id="genGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ef233c"/>
+      <stop offset="100%" stop-color="#9a031e"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title / Job Header -->
+  <rect x="25" y="20" width="850" height="70" rx="8" fill="#27272a" stroke="#3f3f46" stroke-width="1.5"/>
+  <text x="45" y="48" fill="#4ade80" font-size="18" font-weight="bold">First-Level ERP Import 3D Perspective Render — Work Order #WO-2026-8841</text>
+  <text x="45" y="72" fill="#cbd5e1" font-size="13">Material: Baltic Birch Plywood (18mm) + 25mm Foam | Envelope: 1006 x 526 x 691 mm | Generator: Honda EU2200i</text>
+
+  <!-- Coordinate / 3D Grid Axes -->
+  <g transform="translate(100, 480)">
+    <line x1="0" y1="0" x2="650" y2="-60" stroke="#3f3f46" stroke-width="1" stroke-dasharray="4"/>
+    <line x1="0" y1="0" x2="-60" y2="-100" stroke="#3f3f46" stroke-width="1" stroke-dasharray="4"/>
+    <line x1="0" y1="0" x2="0" y2="-320" stroke="#3f3f46" stroke-width="1" stroke-dasharray="4"/>
+  </g>
+
+  <!-- 3D Isometric / Axonometric Enclosure Geometry -->
+  <g transform="translate(260, 200)">
+    <!-- Base Plate Decoupled -->
+    <polygon points="0,210 380,120 460,170 80,260" fill="#2b2d42" stroke="#4ade80" stroke-width="2"/>
+
+    <!-- Foam Insulation Lining Interior Base -->
+    <polygon points="20,205 365,123 440,169 95,251" fill="url(#foamGrad)" stroke="#ee9b00" stroke-width="1"/>
+
+    <!-- Generator Block EU2200i inside Central Bay -->
+    <!-- Front Face -->
+    <polygon points="120,135 290,95 290,195 120,235" fill="url(#genGrad)" stroke="#d90429" stroke-width="1.5"/>
+    <!-- Top Face -->
+    <polygon points="120,135 180,100 350,60 290,95" fill="#f77f00" stroke="#d90429" stroke-width="1.5"/>
+    <!-- Side Face -->
+    <polygon points="290,95 350,60 350,160 290,195" fill="#9a031e" stroke="#d90429" stroke-width="1.5"/>
+    <text x="165" y="180" fill="#ffffff" font-size="12" font-weight="bold">Honda EU2200i</text>
+    <text x="165" y="196" fill="#fef08a" font-size="10">510 x 290 x 425 mm</text>
+
+    <!-- Intake Sound Maze Baffles (Cyan) -->
+    <polygon points="35,160 55,155 55,230 35,235" fill="#0077b6" opacity="0.8" stroke="#00b4d8" stroke-width="1.5"/>
+    <polygon points="70,145 90,140 90,215 70,220" fill="#0077b6" opacity="0.8" stroke="#00b4d8" stroke-width="1.5"/>
+    <text x="25" y="255" fill="#38bdf8" font-size="11">S-Maze Intake</text>
+
+    <!-- Exhaust Decoupled Cowl & Flange (Red) -->
+    <polygon points="340,105 365,100 365,135 340,140" fill="#d00000" stroke="#ff4d6d" stroke-width="1.5"/>
+    <text x="360" y="90" fill="#ff4d6d" font-size="11">Exhaust Port</text>
+
+    <!-- Outer Plywood Shell (Transparent Phantom Panels) -->
+    <!-- Rear / Left Back Wall -->
+    <polygon points="0,210 0,20 380,-70 380,120" fill="url(#woodGrad)" stroke="#e76f51" stroke-width="2"/>
+    <!-- Top Lid (Hinged at back) -->
+    <polygon points="0,20 80,70 460,-20 380,-70" fill="#e9c46a" opacity="0.5" stroke="#f4a261" stroke-width="2"/>
+    <!-- Right Wall (Exhaust side) -->
+    <polygon points="380,-70 460,-20 460,170 380,120" fill="url(#woodGrad)" stroke="#e76f51" stroke-width="2"/>
+    <!-- Front Panel (Transparent / Cutaway) -->
+    <polygon points="0,210 80,260 80,70 0,20" fill="#f4a261" opacity="0.3" stroke="#e76f51" stroke-width="2"/>
+    <polygon points="80,260 460,170 460,-20 80,70" fill="#f4a261" opacity="0.15" stroke="#e76f51" stroke-width="1.5" stroke-dasharray="3"/>
+
+    <!-- Mobility Kit: Rear Wheel (Ø150mm) -->
+    <ellipse cx="430" cy="180" rx="20" ry="32" fill="#111827" stroke="#9ca3af" stroke-width="2"/>
+    <circle cx="430" cy="180" r="6" fill="#d1d5db"/>
+
+    <!-- Fold-Down Handle -->
+    <polyline points="0,120 -35,105 -35,130 0,145" fill="none" stroke="#94a3b8" stroke-width="5" stroke-linecap="round"/>
+
+    <!-- Callout Dimensions -->
+    <line x1="80" y1="275" x2="460" y2="185" stroke="#4ade80" stroke-width="1.5"/>
+    <text x="240" y="245" fill="#4ade80" font-size="13" font-weight="bold">L_ext = 1006 mm</text>
+
+    <line x1="475" y1="170" x2="475" y2="-20" stroke="#4ade80" stroke-width="1.5"/>
+    <text x="485" y="80" fill="#4ade80" font-size="13" font-weight="bold">H_ext = 691 mm</text>
+  </g>
+
+  <!-- Legend & Status Footer -->
+  <rect x="25" y="540" width="850" height="60" rx="8" fill="#27272a" stroke="#3f3f46" stroke-width="1.5"/>
+  <circle cx="50" cy="570" r="8" fill="#bc6c25"/>
+  <text x="66" y="575" fill="#cbd5e1" font-size="12">18mm Birch Shell</text>
+  <circle cx="210" cy="570" r="8" fill="#ee9b00"/>
+  <text x="226" y="575" fill="#cbd5e1" font-size="12">25mm Acoustic Foam</text>
+  <circle cx="380" cy="570" r="8" fill="#ef233c"/>
+  <text x="396" y="575" fill="#cbd5e1" font-size="12">Generator Core</text>
+  <circle cx="520" cy="570" r="8" fill="#0077b6"/>
+  <text x="536" y="575" fill="#cbd5e1" font-size="12">Intake Sound Maze</text>
+  <text x="700" y="575" fill="#38bdf8" font-size="12" font-weight="bold">Interactive 3D Ready</text>
+</svg>

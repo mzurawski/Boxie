@@ -20,7 +20,51 @@ For the complete engineering specifications, AutoCAD formulation equations, and 
 
 ---
 
-## 2. Visual Design Views (Generated from Requirements)
+## 2. Processed ERP Work Order Example & 3D Generated View
+
+The system imports production work orders directly from the ERP system (see [`examples/`](./examples/)).
+
+### 2.1 First-Level Import Example (`WO-2026-8841`)
+
+- **Inbound ERP File**: [`examples/erp_import_wo_8841_plywood.json`](./examples/erp_import_wo_8841_plywood.json)
+- **Target Generator**: Honda EU2200i Inverter ($510\text{ mm} \times 290\text{ mm} \times 425\text{ mm}$)
+- **Material Specification**: Baltic Birch Plywood ($T_{\text{wall}} = 18\text{ mm}$) with $25\text{ mm}$ flame-retardant acoustic foam lining
+- **Computed Internal Volume**: $920.0\text{ mm (L)} \times 440.0\text{ mm (W)} \times 575.0\text{ mm (H)}$
+- **Computed Exterior Envelope**: $1006.0\text{ mm (L)} \times 526.0\text{ mm (W)} \times 691.0\text{ mm (H)}$
+
+### 2.2 First-Level Rendered 3D View (Manipulatable Model)
+
+An interactive, manipulatable 3D model with orbit rotation, pan, and zoom controls is generated in WebGL / Three.js:
+
+* **Interactive 3D Viewer (Manipulatable)**: Open [`docs/enclosure_3d_viewer.html`](./docs/enclosure_3d_viewer.html) in any modern browser to inspect, rotate, pan, and zoom the 3D model.
+* **3D Visual Perspective Rendering**:
+
+![Generated 3D Enclosure Render for WO-2026-8841](./docs/enclosure_3d_render.svg)
+
+```
+                            3D ISOMETRIC SCHEMATIC (WO-2026-8841)
+                                      +--------------------+
+                                     /                    /|
+                                    /   TOP LID PANEL    / |
+                                   /    (18mm Birch)    /  |
+                                  +--------------------+   |
+                                  |                    |   |
+     [Intake S-Maze Chamber]      |  [GENERATOR BAY]   |   |     [Exhaust Cowl]
+     +---------------------+      |                    |   |     +------------+
+     | / / / / / / / / / / | ===> |   Honda EU2200i    | ====>   | ExhaustTip |
+     | / / / / / / / / / / |      |   510x290x425 mm   |   |     +------------+
+     +---------------------+      |                    |   |
+                                  |  25mm Foam Lining  |   +----O [Rear Wheel
+      [Fold Handle] ===O          +--------------------+  /       Ø150mm]
+                                  /                    / /
+                                 / FRONT ACCESS PANEL / /
+                                +--------------------+
+                                 <-- L = 1006 mm ---->
+```
+
+---
+
+## 3. Visual Design Views (Generated from Requirements)
 
 The diagrams below represent the enclosure layout, airflow pathways, dimensions, and sub-assemblies derived from the specifications in `REQUIREMENTS.md`.
 
@@ -121,7 +165,7 @@ Demonstrating compliance with **REQ-PHY-01** (clearances), **REQ-SAF-01**, and *
 
 ---
 
-## 3. Dimensional & Design Summary Table
+## 4. Dimensional & Design Summary Table
 
 | Attribute | Specification | Traceability ID | Description |
 | :--- | :--- | :--- | :--- |
@@ -138,7 +182,7 @@ Demonstrating compliance with **REQ-PHY-01** (clearances), **REQ-SAF-01**, and *
 
 ---
 
-## 4. AutoCAD Layer Organization
+## 5. AutoCAD Layer Organization
 
 The box model elements map directly to AutoCAD drawing layers:
 
@@ -155,7 +199,7 @@ The box model elements map directly to AutoCAD drawing layers:
 
 ---
 
-## 5. Fabrication & Usage Instructions
+## 6. Fabrication & Usage Instructions
 
 1. **AutoCAD Generation**:
    - Ingest job record or run the parametric LISP script (`GEN_BOXIE`) with generator dimensions $(L_g, W_g, H_g)$.
